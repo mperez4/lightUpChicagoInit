@@ -16,7 +16,19 @@ var track = argv.search;
 var timeOn = argv.speed;	
 var isOn = false; 
 var isStarting = true;
-var gpio = require("pi-gpio"); 
+var spi = require('spi'),
+
+RPixel = require('raspberrypixels');
+var Pixel = RPixel.Pixel;
+var numPixels = 11;
+var deviceName = '/dev/spidev0.0';
+
+var device  = new spi.Spi(deviceName, function(){});
+var pixels  = new RPixel.PixelBuffer(device, numPixels); //instantiates the PixelBuffer class
+var r = 0;
+var g = 0;
+var b = 0;
+
 var util = require('util'),
     twitter = require('twitter');
 var twit = new twitter({
@@ -32,8 +44,8 @@ onStart();
 twit.stream('filter', { track: track }, function(stream) {
 	//event
     stream.on('data', function(data) {
-    	if(output(data) && !onStart() ){	    	
-	    	isOn = true;
+    	if(output(data) && !onStart() ){	    		    	
+	    	//throbbbbbbbb
 	    	setTimeout(function(){	
 		    	isOn = false;		    	
 		    }, timeOn);
@@ -42,14 +54,25 @@ twit.stream('filter', { track: track }, function(stream) {
 
 });
 
+setInterval(onStart, 100);
 // startup
-function onStart(){
-	//lights up slowly to white
-	//if (lights are all the way turned on){
-	//return false;
-	//}
+function onStart(){       
+     
+    for(int i = 0; i == 255; i+= .5){
+    	for(int n = 0; n < numPixels.length; n++){
+    	pixles.setRGB(n, i,i ,i);    	
+    }
+    pixels.update();
 }
+    return true;	
+}
+//----------------------------------------------------------------------
+//animation
+function animate(){
+	var color = {r: Math.random()*254, b: Math.random()*254, g: Math.random()};
+	//throbb!
 
+}
 //----------------------------------------------------------------------
 function output(data){
 	if(typeof data !== 'undefined' &&
