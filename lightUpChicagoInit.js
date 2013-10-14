@@ -20,7 +20,7 @@ var spi = require('spi'),
 
 RPixel = require('raspberrypixels');
 var Pixel = RPixel.Pixel;
-var numPixels = 11;
+var numPixels = 64;
 var deviceName = '/dev/spidev0.0';
 
 var device  = new spi.Spi(deviceName, function(){});
